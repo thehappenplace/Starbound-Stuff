@@ -1,0 +1,15 @@
+{
+  "itemName" : "burmheadbelly1",
+  "price" : 0,
+  "inventoryIcon" : "icons.png:head",
+  "dropCollision" : [-4.0, -3.0, 4.0, 3.0],
+  "maxStack" : 1,
+  "rarity" : "Rare",
+  "description" : "The jaws of a powerful serpent, looks like they're prepared to strike.",
+  "shortdescription" : "Snake Head",
+  "tooltipKind" : "armor",
+
+  "maleFrames" : "head.png",
+  "femaleFrames" : "head.png",
+  "mask" : "mask.png"
+}

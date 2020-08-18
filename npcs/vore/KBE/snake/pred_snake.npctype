@@ -1,0 +1,158 @@
+{
+  "type" : "pred_snake",
+  "baseType" : "villager",
+ 
+   
+  "scriptConfig" : { 
+	"questGenerator" : {
+      "pools" : ["common"],
+      "enableParticipation" : true,
+	  "graduation" : {
+	    "nextNpcType" : []
+	  }
+    },
+    "dialog" : {
+      "tenant" : {
+        "grumbles" : {
+          "tagCriteria" : {
+			"default" : {
+			  "default" : [
+								"...Put back...",
+								"...Don't do that...",
+								"...Not good enough...",
+								"...Need more..."
+			  ]
+			}
+		  },
+          "enclosedArea" : {
+			"default" : {
+			  "default" : [
+								"...Too windy...",
+								"...Too chilly...",
+								"...The heat is getting out...",
+								"...Needs fixing..."
+			  ]
+			}
+		  },
+          "otherDeed" : {
+			"default" : {
+			  "default" : [
+							"...Too crowded...",
+							"...Tresspassers...",
+							"...Begone..."
+			  ]
+			}
+		  },
+          "severe" : {
+			"default" : {
+			  "default" : [
+						"...I needed that...",
+						"...Stop breaking things...",
+						"...Don't do that...",
+						"...Causing trouble..."
+			  ]
+			}
+		  },
+          "final" : {
+			"default" : {
+			  "default" : [
+						"...Don't destroy a snake's home...",
+						"...I'll be leaving if soon... fix it...",
+						"...fix it... Now..."
+			  ]
+			}
+          }
+		},
+        "arrivedHome" : {
+          "beacon" : {
+			"default" : {
+			  "default" : [
+						"...Home sweet home...",
+						"...Maybe something tasty is waiting for me...",
+						"...A good time to rest off the last meal..."
+			  ]
+			}
+		  },
+          "rent" : {
+			"default" : {
+			  "default" : [
+						"...Why should I pay you... I should eat you...",
+						"...Enjoy it while you can...",
+						"...Perhaps you'll pay me for...'rent'..."
+			  ]
+			}
+          }
+		}
+      },
+      "flee" : {
+        "helpme" : {
+		  "default" : {
+			"default" : [
+					"...Tresspassers...",
+					"...Attackers...",
+					"...Invaders...",
+					"...Know your place..."
+			]
+		  }
+		},
+		"safe" : {
+		  "default" : {
+			"default" : [
+					"...The stress... Nearly lost my lunch...",
+					"...Do you know what snakes do... when stressed?...",
+					"...Finally... I can rest..."
+			]
+		  }
+        }
+	  },
+      "greeting" : {
+        "default" : {
+          "default" : [
+            "...Hello...",
+			"...",
+			"...You Look tasssty...",
+			"...You are the food?..."
+          ]
+        }
+      },
+	  "converse" : {
+        "default" : {
+          "default" : [
+            "...Why are you still outside? ...Not for long...",
+            "...Prey shouldn't walk in a snake's line of sight...",
+            "...Your friend... you'll see them soon...",
+            "...You're food... Stop stalling...",
+            "...I let you wander... get nice and fat...",
+            "...May your soul feed the great Quetzalcoatl... As your body mine...",
+            "... You keep saying 'don't eat me' and 'I'm not food'.... but... we both know thats a lie..."
+          ]
+        }
+      }
+    }
+  },
+  "disableWornArmor" : false,
+  "scriptDelta" : 5,
+  
+  "scripts" : [ "/npcs/bmain.lua",
+				"/npcs/vore/KBE/snake/pred_snake.lua" 
+  ],
+
+  "matchColorIndices" : true,
+  "items" : {
+    "override" : [
+      [0, [
+          {
+            "head" : [
+              { "name" : "snakehead"}
+            ],
+            "chest" : [
+              { "name" : "snakechest"}
+            ],
+            "legs" : [
+              { "name" : "snakelegs" }
+            ]
+          }
+        ] ]
+    ]
+  }
+}
