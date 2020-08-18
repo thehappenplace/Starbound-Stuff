@@ -10,9 +10,8 @@ https://github.com/Sheights/StarboundSimpleVoreMod
 **Install**
 
 Coppy the folder to your mod folder located in the starbound game folder
-Do not nest the folder so it should be Starbound/mods/Modfoldernamehere/ all your goodies here
-You can name the folder if necessary I am pretty bad at naming and the folder is rather stupidly named
-It won't effect anything and should make it easier to read
+Do not nest the folder so it should be Starbound/mods/Modfoldernamehere/ not Starbound/mods/Extrafolder/ModFoldername <-bad
+
 
 **INFO**
 
