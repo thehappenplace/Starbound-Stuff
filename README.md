@@ -5,6 +5,13 @@ Nothing big just two snakes that you can spawn in.
 **THis Requires the StarboundSimpleVoreMod by sheights** found below
 https://github.com/Sheights/StarboundSimpleVoreMod
 
+**Install**
+Coppy the folder to your mod folder located in the starbound game folder
+Do not nest the folder so it should be Starbound/mods/Modfoldernamehere/ all your goodies here
+You can name the folder if necessary I am pretty bad at naming and the folder is rather stupidly named
+It won't effect anything and should make it easier to read
+
+**INFO**
 They have the same spawn setup: 1 door, 1 Light, 6 floran, 1 Vore flag, Colony deed
 
 They only have the one version and it does not digest.
