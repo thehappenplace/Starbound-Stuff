@@ -1,0 +1,14 @@
+{
+  "itemName" : "snakebellylegs1",
+  "price" : 0,
+  "inventoryIcon" : "icons.png:pants",
+  "dropCollision" : [-4.0, -3.0, 4.0, 3.0],
+  "maxStack" : 1,
+  "rarity" : "Rare",
+  "description" : "Long twisting body of a massive serpent, seems someone wasn't satisfied by simply touching it.",
+  "shortdescription" : "Snake Body",
+  "tooltipKind" : "armor",
+
+  "maleFrames" : "pants.png",
+  "femaleFrames" : "pants.png"
+}

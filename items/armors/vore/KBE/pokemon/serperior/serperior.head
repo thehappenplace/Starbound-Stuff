@@ -1,0 +1,15 @@
+{
+  "itemName" : "serperiorhead",
+  "price" : 0,
+  "inventoryIcon" : "icons.png:head",
+  "dropCollision" : [-4.0, -3.0, 4.0, 3.0],
+  "maxStack" : 1,
+  "rarity" : "Rare",
+  "description" : "The eyes seem to give of a sense of nobility.",
+  "shortdescription" : "Serperior Head",
+  "tooltipKind" : "armor",
+
+  "maleFrames" : "head.png",
+  "femaleFrames" : "head.png",
+  "mask" : "mask.png"
+}

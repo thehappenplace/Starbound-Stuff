@@ -1,0 +1,14 @@
+{
+  "itemName" : "snakebellylegs6",
+  "price" : 0,
+  "inventoryIcon" : "icons.png:pants",
+  "dropCollision" : [-4.0, -3.0, 4.0, 3.0],
+  "maxStack" : 1,
+  "rarity" : "Rare",
+  "description" : "Long twisting body of a massive serpent.  Looks like the they're not coming out now.",
+  "shortdescription" : "Snake Body",
+  "tooltipKind" : "armor",
+
+  "maleFrames" : "pants.png",
+  "femaleFrames" : "pants.png"
+}

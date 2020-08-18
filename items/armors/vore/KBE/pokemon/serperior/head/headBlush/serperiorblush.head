@@ -1,0 +1,15 @@
+{
+  "itemName" : "serperiorheadblush",
+  "price" : 0,
+  "inventoryIcon" : "icons.png:head",
+  "dropCollision" : [-4.0, -3.0, 4.0, 3.0],
+  "maxStack" : 1,
+  "rarity" : "Rare",
+  "description" : "The jaws of a powerful serpent, luckily they aren't the real thing though the lump struggling in it's jaws suggests otherwise.",
+  "shortdescription" : "Snake Head",
+  "tooltipKind" : "armor",
+
+  "maleFrames" : "head.png",
+  "femaleFrames" : "head.png",
+  "mask" : "mask.png"
+}
