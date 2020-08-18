@@ -1,0 +1,156 @@
+{
+  "type" : "pred_serperior",
+  "baseType" : "villager",
+  
+  "scriptConfig" : { 
+	"questGenerator" : {
+      "pools" : ["common"],
+      "enableParticipation" : true,
+	  "graduation" : {
+	    "nextNpcType" : []
+	  }
+    },
+    "dialog" : {
+      "tenant" : {
+        "grumbles" : {
+          "tagCriteria" : {
+			"default" : {
+			  "default" : [
+								".Why do you mess with my things?",
+								"Don't do that",
+								"No",
+								"...Need more..."
+			  ]
+			}
+		  },
+          "enclosedArea" : {
+			"default" : {
+			  "default" : [
+								"reminds me of a pokeball",
+								"Too chilly",
+								"...The heat is getting out...",
+								"...Needs fixing..."
+			  ]
+			}
+		  },
+          "otherDeed" : {
+			"default" : {
+			  "default" : [
+							"Only room for one",
+							"Why must I share?",
+							"Do something with them or I will!"
+			  ]
+			}
+		  },
+          "severe" : {
+			"default" : {
+			  "default" : [
+						"That was mine not yours",
+						"That was rude",
+						"Someone should teach you a lesson",
+						":("
+			  ]
+			}
+		  },
+          "final" : {
+			"default" : {
+			  "default" : [
+						"This isn't the place for someone like me",
+						"You better fix it",
+						"This is the last straw"
+			  ]
+			}
+          }
+		},
+        "arrivedHome" : {
+          "beacon" : {
+			"default" : {
+			  "default" : [
+						"Home sweet home",
+						"You'll do well serving me",
+						"good place to rest of a meal"
+			  ]
+			}
+		  },
+          "rent" : {
+			"default" : {
+			  "default" : [
+						"For now i'll let you be ",
+						"I suppose I can give you something",
+						"Perhaps you'll pay me for...'rent'"
+			  ]
+			}
+          }
+		}
+      },
+      "flee" : {
+        "helpme" : {
+		  "default" : {
+			"default" : [
+					"Begone at once",
+					"Protect me!",
+					"Hiss",
+					"Know your place"
+			]
+		  }
+		},
+		"safe" : {
+		  "default" : {
+			"default" : [
+					"Phew glad that's over",
+					"Thanks for protecting me I guess",
+					"Been so long since I've been in a battle"
+			]
+		  }
+        }
+	  },
+      "greeting" : {
+        "default" : {
+          "default" : [
+            "You are not my master",
+			"...",
+			"You Look tasssty",
+			"Hello"
+          ]
+        }
+      },
+	  "converse" : {
+        "default" : {
+          "default" : [
+            "Why are you still outside? ...Not for long",
+            "Prey shouldn't walk in a snake's line of sight",
+            "Your friend? haven't seen them",
+            "You're mine don't forget that",
+            "I let you wander but eventually your going back in",
+            "You keep saying 'don't eat me' but that hasn't stopped me yet"
+          ]
+        }
+      }
+    }
+  },
+  "disableWornArmor" : false,
+  "scriptDelta" : 5,
+  
+  "scripts" : [ "/npcs/bmain.lua",
+				"/npcs/vore/KBE/pokemon/serperior/pred_serperior.lua" 
+  ],
+
+  "matchColorIndices" : true,
+  "items" : {
+    "override" : [
+      [0, [
+          {
+            "head" : [
+              { "name" : "serperiorhead"}
+            ],
+            "chest" : [
+              { "name" : "serperiorchest"}
+            ],
+            "legs" : [
+              { "name" : "serperiorlegs" }
+            ]
+          }
+        ] ]
+    ]
+  }
+}
