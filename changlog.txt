@@ -1,0 +1,10 @@
+**Version 1.0.1**
+-Added Digest versions to the snakes
+-Digest begins once the prey reaches the stomach and becomes trapped.  So while you slowly slip down you won't take damage
+-Reworked Plea to not completely release prey on success.  Still can release but now has chance to release into different stages of the swallow.
+
+-General Program decluttering to make it cleaner and reduce redundant code
+
+**Version 1.0.0**
+Base Version Release :D
+
