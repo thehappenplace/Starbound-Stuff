@@ -1,25 +1,19 @@
-require "/scripts/vore/npcvore.lua"  -- Custom file used by any of my characters
+require "/scripts/vore/npcvore.lua"
 --########################################
 --  Based off of the Argo pred in the SSVM
 --########################################
---world.entitySpecies(victim)  checks victim species
 
+struggleFlag = false
+exhausetedTimer = 2
 animFlag = false
 animTimer = 0
 
--- Set this to determine how long each stage will last.  The lower the value, the faster you progress between the stages.
--- Default is 20.  Give the stage enough time or you might have problems actually escaping. Too low and it may break.  Either way, not good.
-stageInterval = 20
-
--- Define playerLines needed or else won't work
+stages = 6
+stageInterval = 15
+currentLines = "mouth"
 playerLines = {}
 
--- Actually defining individual lines to be said by the NPC as playerLines["string"/number]= {lines} (ex playerLines["example"] = { "hi" }
--- These are then called by the function sayLine( playerLines["string"/number]) at any point you feel like (ex feed, request, escape, #ofvictims, etc)
--- I suggest using names to help you know where lines will be used. Numbers are easy when dealing with multiprey
--- When doing multiple lines make sure that each line is followed by a comma(,) except for the last one in the or they will not work
 
---Belly Lines (Idle)----------------------------
 playerLines["belly1"] = {	"~Mmmm, you feel amazing sliding down my throat.",
 							"Hopefully you save some energy, my belly could use a nice rub.",
 							"You aren't worthy to remain outside of me.",
@@ -165,10 +159,9 @@ playerLines["convinceFail"] = { 	"I think I'll keep, <entityname> a little longe
 }
 playerLines["swallow"] = {	"Delicious"
 } 
-------------------------------------------------
+
 function initHook()
 
-	--Holds a string value representing belly number
 	if storage.belly == nil then
 		storage.belly = ""
 	end
@@ -184,11 +177,6 @@ function initHook()
 	legs = {
 		name = "serperiorlegs"
 	}
-
-	headblush = {
-		name = "serperiorheadblush"
-	}
-	
 	--Leg belly
 	
 	legsbelly1 = {
@@ -209,23 +197,27 @@ function initHook()
 	legsbelly6 = {
 		name = "serperiorbellylegs6"
 	}
+	legsbelly7 = {
+		name = "serperiorbellylegs7"
+	}
+	legsbelly8 = {
+		name = "serperiorbellylegs8"
+	}
 end
 
 function feedHook()
--- Called when NPC decides to eat you
 	victim[#victim + 1] = temptarget
 	request[#victim] = true
 	isPlayer[#victim] = true
 	storage.belly = "1"
-	cloth()
+	cloth(head, legs, chest)
 	animFlag = true
 	sayLine(playerLines["swallow"])
 end
 
 function requestHook(input)
--- Called when you volunteer to get eaten
 	storage.belly = "1"
-	cloth()
+	cloth(head, legs, chest)
 	animFlag = true
 	sayLine(playerLines["swallow"])
 end
@@ -234,7 +226,7 @@ function loseHook()
 
 	npc.say("Is this even called")
 	storage.belly = ""
-	cloth()
+	cloth(head, legs, chest)
 	isPlayer = false
 	
 end
@@ -243,7 +235,7 @@ function interact(args)
 	
 	if reqTimer < 0.7 then
 		if #victim > 0 then
-			if request[#victim] and args.sourceId == victim[#victim] then --check to make sure request came from victim. I think this is a reduntant check will need to test
+			if request[#victim] and args.sourceId == victim[#victim] then --check to make sure request came from victim
 				escapeAttempt(args)
 			else
 				convince()
@@ -267,84 +259,29 @@ function interact(args)
 end
 
 function escapeAttempt(args)
-
---	How This Function will behave is by allowing a more interactive release by allowing the player to struggle for freedom
---  from stages 1-8 with stage 9 being a looping stage keeping the player trapped inside the predator.
---  
---  ON ATTEMPT PLayer and pred both roll random number  (as of right now best way to achieve struggle).
---  player roll vs pred roll escape is successful (when player > then pred)  *Pred is stronger as player gets deeper bigger number gap (ex. below).
--- (math.random(200) >= math.random(350)) then next stage ((math.random(200) >= math.random(375))  making it harder to escape.
---	Successful attempt results in getting moved to prievous stage closer to freedom.
---  As of right now you can simply spam the interact button till released(but where's the fun in that).
--- 	
---  STAGES - Calculated based on the stageInterval value stages increase or decrease based on it's value.
---  Based on how many were defined in the Update() function an if statement must be made for each stage section.
---	Only the starting stage can be escaped from (When first swallowed) but if they get trapped there will be a way of escaping.
---	checks the timer stopWatch to determine what stage victim is in.
---  stages are stopWatch[#victim] > (stageinterval*number) and stopWatch[#victim] < (stageinterval*number + 1) to get the entire stage duration.
---  Actual stages will be defined/created in update() function.
-
---  TRAPPED - once Stopwatch passes a certain point player will be unable to escape and be belly locked inside the predator.
---  In order to be released the player must be lucky(RNGesus be with you) or another player must convince(better odds) the predator to release prey.
---  If you feel this is unfair you may copy contents of Belly 3 stage into trapped stage or modify the plea() function.
-
-
 		
-		if stopWatch[#victim] > stageInterval*6 then --Belly 6 stageInterval 120 - 140
+		if stopWatch[#victim] > stageInterval*6 then
 			plea(args)
-		elseif stopWatch[#victim] > stageInterval*5 and stopWatch[#victim] <= stageInterval*6 then --Belly 5 stageInterval 100 - 120
-			if (math.random(200) >= math.random(350)) then
-				stopWatch[#victim] = stopWatch[#victim] - stageInterval
-				sayLine(playerLines["bellySucc"])
-			else
-				sayLine(playerLines["bellyFail"])
-			end
-		elseif stopWatch[#victim] > stageInterval*4 and stopWatch[#victim] <= stageInterval*5 then --Belly 4 stageInterval 80 - 100
-			if (math.random(200) >= math.random(325)) then
-				stopWatch[#victim] = stopWatch[#victim] - stageInterval
-				sayLine(playerLines["bellySucc"])
-			else
-				sayLine(playerLines["bellyFail"])
-			end
-		elseif stopWatch[#victim] > stageInterval*3 and stopWatch[#victim] <= stageInterval*4 then --Belly 3 stageInterval 60 - 80
-			if (math.random(200) >= math.random(300)) then
-				stopWatch[#victim] = stopWatch[#victim] - stageInterval
-				sayLine(playerLines["bellySucc"])
-			else
-				sayLine(playerLines["bellyFail"])
-			end
-		elseif stopWatch[#victim] > stageInterval*2 and stopWatch[#victim] <= stageInterval*3 then --Belly 2 stageInterval 40 - 60
-			if (math.random(200) >= math.random(275)) then
-				stopWatch[#victim] = stopWatch[#victim] - stageInterval
-				sayLine(playerLines["bellySucc"])
-			else
-				sayLine(playerLines["bellyFail"])
-			end
-		elseif stopWatch[#victim] > stageInterval and stopWatch[#victim] <= stageInterval*2 then --Belly 1 stageInterval 20 -40
-			if (math.random(200) >= math.random(250)) then
-				stopWatch[#victim] = stopWatch[#victim] - stageInterval
-				sayLine(playerLines["bellySucc"])
-			else
-				sayLine(playerLines["bellyFail"])
-			end
+		elseif stopWatch[#victim] > stageInterval*5 and stopWatch[#victim] <= stageInterval*6 then
+			escapeRoll(5, args)
+		elseif stopWatch[#victim] > stageInterval*4 and stopWatch[#victim] <= stageInterval*5 then
+			escapeRoll(4, args)
+		elseif stopWatch[#victim] > stageInterval*3 and stopWatch[#victim] <= stageInterval*4 then
+			escapeRoll(3, args)
+		elseif stopWatch[#victim] > stageInterval*2 and stopWatch[#victim] <= stageInterval*3 then
+			escapeRoll(2, args)
+		elseif stopWatch[#victim] > stageInterval and stopWatch[#victim] <= stageInterval*2 then
+			escapeRoll(1, args)
 		else
-			if (math.random(200) >= math.random(225)) then  --Belly (chance for escape) stageInterval < 20
-				storage.belly = ""
-				reqRelease(args)
-				cloth()
-				sayLine(playerLines["bellySucc"])
-			else
-				sayLine(playerLines["bellyFail"])
-			end
+			escapeRoll(0, args)
 		end
 end
 
-function convince(args)
--- Other player has higher chance of success then the person that is trapped.
+function convince()
 	if (math.random(200) >= math.random(500)) then
 		storage.belly = ""
 		release()
-		cloth()
+		cloth(head, legs, chest)
 		sayLine(playerLines["convinceS"])
 	else
 		sayLine(playerLines["convinceF"])
@@ -353,92 +290,81 @@ function convince(args)
 end
 
 function plea(args)
--- Player(victim) pleading to be released by pred (Success = instant release) has low probability of success.
 	if (math.random(100) >= math.random(800)) then
+		sayLine(playerLines["pleaSucc"])
+		stopWatch[#victim] = stopWatch[#victim] -(stageInterval/2 + math.random(stageInterval * stages))
+		if (stopWatch[#victim] < 0) then	
 		storage.belly = ""
 		reqRelease(args)
-		cloth()
-		sayLine(playerLines["pleaSucc"])
+		cloth(head, legs, chest)
+		end
+		
 	else
 		sayLine(playerLines["pleaFail"])
 	end
 	
 end
 
-function cloth() -- Just to get rid of a lot of repeat actions
-		npc.setItemSlot( "head", head)
-		npc.setItemSlot( "chest", chest)
-		npc.setItemSlot( "legs", legs)
+function escapeRoll(stage, args)
+			if (math.random(200) >= math.random(225 + (25 *stage))) then  --Head Belly (chance for escape) stageInterval < 20
+				stopWatch[#victim] = stopWatch[#victim] - stageInterval
+				sayLine(playerLines["bellySucc"])
+			else
+				sayLine(playerLines["bellyFail"])
+			end
+end
+
+function cloth(pHead, pLegs, pChest)
+		npc.setItemSlot( "head", pHead)
+		npc.setItemSlot( "chest", pChest)
+		npc.setItemSlot( "legs", pLegs)
 end
 
 function updateHook(dt)
-	
-	--First part is the animation. Once all animations are played will set animflag to false so second section can be done 
-	if animFlag then -- check true if true do.  If untrue jump to else
-		if #victim == 1 then --Handles stage progression
-			if stopWatch[#victim] > stageInterval*6 then --140 final stage
-				npc.setItemSlot( "head", headblush)
-				npc.setItemSlot( "chest", chest)
-				npc.setItemSlot( "legs", legsbelly6 )
-				storage.belly = "7"
-			elseif stopWatch[#victim] > stageInterval*5then
-				npc.setItemSlot( "head", headblush)
-				npc.setItemSlot( "chest", chest)
-				npc.setItemSlot( "legs", legsbelly6 )
-				storage.belly = "6"
-			elseif stopWatch[#victim] > stageInterval*4 then
-				npc.setItemSlot( "head", headblush)
-				npc.setItemSlot( "chest", chest)
-				npc.setItemSlot( "legs", legsbelly5 )
-				storage.belly = "5"
-			elseif stopWatch[#victim] > stageInterval*3 then
-				npc.setItemSlot( "head", headblush)
-				npc.setItemSlot( "chest", chest)
-				npc.setItemSlot( "legs", legsbelly4 )
-				storage.belly = "4"
-			elseif stopWatch[#victim] > stageInterval*2 then
-				npc.setItemSlot( "head", headblush)
-				npc.setItemSlot( "chest", chest)
-				npc.setItemSlot( "legs", legsbelly3 )
-				storage.belly = "3"
-			elseif stopWatch[#victim] > stageInterval then
-				npc.setItemSlot( "head", headblush)
-				npc.setItemSlot( "chest", chest)
-				npc.setItemSlot( "legs", legsbelly2 )
-				storage.belly = "2"
-			elseif stopWatch[#victim] <= stageInterval then
-				npc.setItemSlot( "head", headblush)
-				npc.setItemSlot( "chest", chest)
-				npc.setItemSlot( "legs", legsbelly1 )
-				storage.belly = "1"
-			end
-			if stopWatch[#victim] > stageInterval*6.5 then -- looping the timer so it doesn't get outrageous
-				if containsPlayer() then -- Check if victim is Player to free infinitely trapped NPC
+		
+	if animFlag then 
+		if #victim == 1 then
+			if stopWatch[#victim] > stageInterval*6.5 then
+				if containsPlayer() then
 					stopWatch[#victim] = stageInterval*6.4
 				else
 					release()
-					cloth()
+					cloth(head, legs, chest)
 				end
+			end
+			if stopWatch[#victim] > stageInterval*6 then
+				cloth(head, legsbelly6, chest)
+				storage.belly = "7"
+				currentLines = "trapped"
+			elseif stopWatch[#victim] > stageInterval*5 then
+				cloth(head, legsbelly6, chest)
+				storage.belly = "6"
+				currentLines = "belly6"
+			elseif stopWatch[#victim] > stageInterval*4 then
+				cloth(head, legsbelly5, chest)
+				storage.belly = "5"
+				currentLines = "belly5"
+			elseif stopWatch[#victim] > stageInterval*3 then
+				cloth(head, legsbelly4, chest)
+				storage.belly = "4"
+				currentLines = "belly4"
+			elseif stopWatch[#victim] > stageInterval*2 then
+				cloth(head, legsbelly3, chest)
+				storage.belly = "3"
+				currentLines = "belly3"
+			elseif stopWatch[#victim] > stageInterval then
+				cloth(head, legsbelly2, chest)
+				storage.belly = "2"
+				currentLines = "belly2"
+			elseif stopWatch[#victim] <= stageInterval then
+				cloth(head, legsbelly1, chest)
+				storage.belly = "1"
+				currentLines = "belly1"
 			end
 		end
 	end
-	
--- Say lines based on stageInterval and whether the victim is a player	
 	if containsPlayer() and math.random(700) < 10 then
-		if stopWatch[#victim] > stageInterval*6 then
-			sayLine( playerLines["trapped"] )
-		elseif stopWatch[#victim] > stageInterval*5 then
-			sayLine( playerLines["belly6"] )
-		elseif stopWatch[#victim] > stageInterval*4 then
-			sayLine( playerLines["belly5"] )
-		elseif stopWatch[#victim] > stageInterval*3 then
-			sayLine( playerLines["belly4"] )
-		elseif stopWatch[#victim] > stageInterval*2 then
-			sayLine( playerLines["belly3"] )
-		elseif stopWatch[#victim] > stageInterval then
-			sayLine( playerLines["belly2"] )
-		elseif stopWatch[#victim] <= stageInterval then
-			sayLine( playerLines["belly1"] )
-		end
+			sayLine( playerLines[currentLines] )
+		
 	end
 end
