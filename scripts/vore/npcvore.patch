@@ -3,7 +3,7 @@ function release()  -- Called as release() meaning no variable is passed so it c
 
 	for i=1, #victim do
 			world.sendEntityMessage( victim[i], "applyStatusEffect", "voreclear", 1, entity.id() )
-			releaseHook(input, stopWatch[i])
+			relHook(stopWatch[i])
 			for j = i, capacity do
 
 				if j == capacity then
@@ -23,4 +23,6 @@ function release()  -- Called as release() meaning no variable is passed so it c
 		dress()
 	end
 end
+
+function relHook (time) end
 ]
