@@ -8,10 +8,11 @@ exhausetedTimer = 2
 animFlag = false
 animTimer = 0
 
-
-stageInterval = 20
-
-
+stages = 7
+stageInterval = 15
+effect = "npcdigestvore"
+buff = "digestionImmunity"
+currentLines = "mouth"
 playerLines = {}
 
 
@@ -147,11 +148,11 @@ playerLines["pleaFail"] = {	"There's no point, your mine now.",
 							"No one escapes my coils, accept your place.",
 							"Struggling is pointless, just relax."
 }
-playerLines["pleaSucc"] = {	"Fine, but only so we can do this all over again.",
+playerLines["pleaSucc"] = {	"Mmmmmmmmm~ let's start again shall we",
 							"Ok, I'll let you out, but don't think you'll be staying out.",
-							"~mmmmm Thanks for the belly rub, I guess letting you out temporarily won't hurt.",
-							"Seemed pointless digesting such a nice belly massager.",
-							"*gives you a lick* Come back soon. <3"
+							"~mmmmm Thanks for the belly rub, I guess I can drag this out a little longer.",
+							"I think that message deserves a reward.",
+							"I suppose dragging this out isn't such a bad thing. <3"
 }
 
 playerLines["convinceSucc"] = { 	"You win, I'll release them.",
@@ -214,6 +215,12 @@ function initHook()
 	legsbelly6 = {
 		name = "snakebellylegs6"
 	}
+	legsbelly7 = {
+		name = "snakebellylegs7"
+	}
+	legsbelly8 = {
+		name = "snakebellylegs8"
+	}
 end
 
 function feedHook()
@@ -221,14 +228,14 @@ function feedHook()
 	request[#victim] = true
 	isPlayer[#victim] = true
 	storage.belly = "1"
-	cloth()
+	cloth(head, legs, chest)
 	animFlag = true
 	sayLine(playerLines["swallow"])
 end
 
 function requestHook(input)
 	storage.belly = "1"
-	cloth()
+	cloth(head, legs, chest)
 	animFlag = true
 	sayLine(playerLines["swallow"])
 end
@@ -237,7 +244,7 @@ function loseHook()
 
 	npc.say("Is this even called")
 	storage.belly = ""
-	cloth()
+	cloth(head, legs, chest)
 	isPlayer = false
 	
 end
@@ -270,67 +277,31 @@ function interact(args)
 end
 
 function escapeAttempt(args)
+		
 		if stopWatch[#victim] > stageInterval*7 then  --Trapped must plea with pred to be freed (won't let you go easy)
 			plea(args)
-		elseif stopWatch[#victim] > stageInterval*6 and stopWatch[#victim] <= stageInterval*7 then --Belly 6 stageInterval 120 - 140
-			if (math.random(200) >= math.random(375)) then
-				stopWatch[#victim] = stopWatch[#victim] - stageInterval
-				sayLine(playerLines["bellySucc"])
-			else
-				sayLine(playerLines["bellyFail"])
-			end
-		elseif stopWatch[#victim] > stageInterval*5 and stopWatch[#victim] <= stageInterval*6 then --Belly 5 stageInterval 100 - 120
-			if (math.random(200) >= math.random(350)) then
-				stopWatch[#victim] = stopWatch[#victim] - stageInterval
-				sayLine(playerLines["bellySucc"])
-			else
-				sayLine(playerLines["bellyFail"])
-			end
-		elseif stopWatch[#victim] > stageInterval*4 and stopWatch[#victim] <= stageInterval*5 then --Belly 4 stageInterval 80 - 100
-			if (math.random(200) >= math.random(325)) then
-				stopWatch[#victim] = stopWatch[#victim] - stageInterval
-				sayLine(playerLines["bellySucc"])
-			else
-				sayLine(playerLines["bellyFail"])
-			end
-		elseif stopWatch[#victim] > stageInterval*3 and stopWatch[#victim] <= stageInterval*4 then --Belly 3 stageInterval 60 - 80
-			if (math.random(200) >= math.random(300)) then
-				stopWatch[#victim] = stopWatch[#victim] - stageInterval
-				sayLine(playerLines["bellySucc"])
-			else
-				sayLine(playerLines["bellyFail"])
-			end
-		elseif stopWatch[#victim] > stageInterval*2 and stopWatch[#victim] <= stageInterval*3 then --Belly 2 stageInterval 40 - 60
-			if (math.random(200) >= math.random(275)) then
-				stopWatch[#victim] = stopWatch[#victim] - stageInterval
-				sayLine(playerLines["bellySucc"])
-			else
-				sayLine(playerLines["bellyFail"])
-			end
-		elseif stopWatch[#victim] > stageInterval and stopWatch[#victim] <= stageInterval*2 then --Belly 1 stageInterval 20 -40
-			if (math.random(200) >= math.random(250)) then
-				stopWatch[#victim] = stopWatch[#victim] - stageInterval
-				sayLine(playerLines["bellySucc"])
-			else
-				sayLine(playerLines["bellyFail"])
-			end
+		elseif stopWatch[#victim] > stageInterval*6 and stopWatch[#victim] <= stageInterval*7 then 
+			escapeRoll(6, args)
+		elseif stopWatch[#victim] > stageInterval*5 and stopWatch[#victim] <= stageInterval*6 then 
+			escapeRoll(5, args)
+		elseif stopWatch[#victim] > stageInterval*4 and stopWatch[#victim] <= stageInterval*5 then
+			escapeRoll(4, args)
+		elseif stopWatch[#victim] > stageInterval*3 and stopWatch[#victim] <= stageInterval*4 then
+			escapeRoll(3, args)
+		elseif stopWatch[#victim] > stageInterval*2 and stopWatch[#victim] <= stageInterval*3 then 
+			escapeRoll(2, args)
+		elseif stopWatch[#victim] > stageInterval and stopWatch[#victim] <= stageInterval*2 then
+			escapeRoll(1, args)
 		else
-			if (math.random(200) >= math.random(225)) then  --Head Belly (chance for escape) stageInterval < 20
-				storage.belly = ""
-				reqRelease(args)
-				cloth()
-				sayLine(playerLines["mouthSucc"])
-			else
-				sayLine(playerLines["mouthFail"])
-			end
+			escapeRoll(0, args)
 		end
 end
 
-function convince(args)
+function convince()
 	if (math.random(200) >= math.random(500)) then
 		storage.belly = ""
 		release()
-		cloth()
+		cloth(head, legs, chest)
 		sayLine(playerLines["convinceS"])
 	else
 		sayLine(playerLines["convinceF"])
@@ -340,20 +311,44 @@ end
 
 function plea(args)
 	if (math.random(100) >= math.random(800)) then
+		sayLine(playerLines["pleaSucc"])
+		stopWatch[#victim] = stopWatch[#victim] -(stageInterval/2 + math.random(stageInterval * stages))
+		if (stopWatch[#victim] < 0) then	
 		storage.belly = ""
 		reqRelease(args)
-		cloth()
-		sayLine(playerLines["pleaSucc"])
+		cloth(head, legs, chest)
+		end
+		
 	else
 		sayLine(playerLines["pleaFail"])
 	end
 	
 end
 
-function cloth()
-		npc.setItemSlot( "head", head)
-		npc.setItemSlot( "chest", chest)
-		npc.setItemSlot( "legs", legs)
+function escapeRoll(stage, args)
+			if (math.random(200) >= math.random(225 + (25 *stage))) then
+				if stage == 0 then
+				storage.belly = ""
+				reqRelease(args)
+				cloth(head, legs, chest)
+				sayLine(playerLines["mouthSucc"])
+				else
+				stopWatch[#victim] = stopWatch[#victim] - stageInterval
+				sayLine(playerLines["bellySucc"])
+				end
+			else
+				if stage == 0 then
+				sayLine(playerLines["mouthFail"])
+				else
+				sayLine(playerLines["bellyFail"])
+				end
+			end
+end
+
+function cloth(pHead, pLegs, pChest)
+		npc.setItemSlot( "head", pHead)
+		npc.setItemSlot( "chest", pChest)
+		npc.setItemSlot( "legs", pLegs)
 end
 
 function updateHook(dt)
@@ -370,76 +365,52 @@ function updateHook(dt)
 		animTimer = animTimer + dt
 	else
 		if #victim == 1 then
-			if stopWatch[#victim] > stageInterval*7 then --160 final stage
-				npc.setItemSlot( "head", head)
-				npc.setItemSlot( "chest", chest)
-				npc.setItemSlot( "legs", legsbelly6 )
-				storage.belly = "8"
-			elseif stopWatch[#victim] > stageInterval*6 then -- 140
-				npc.setItemSlot( "head", head)
-				npc.setItemSlot( "chest", chest)
-				npc.setItemSlot( "legs", legsbelly6 )
-				storage.belly = "7"
-			elseif stopWatch[#victim] > stageInterval*5 then -- 120 
-				npc.setItemSlot( "head", head)
-				npc.setItemSlot( "chest", chest)
-				npc.setItemSlot( "legs", legsbelly5 )
-				storage.belly = "6"
-			elseif stopWatch[#victim] > stageInterval*4 then --100
-				npc.setItemSlot( "head", head)
-				npc.setItemSlot( "chest", chest)
-				npc.setItemSlot( "legs", legsbelly4 )
-				storage.belly = "5"
-			elseif stopWatch[#victim] > stageInterval*3 then --80
-				npc.setItemSlot( "head", head)
-				npc.setItemSlot( "chest", chest)
-				npc.setItemSlot( "legs", legsbelly3 )
-				storage.belly = "4"
-			elseif stopWatch[#victim] > stageInterval*2 then --60
-				npc.setItemSlot( "head", head)
-				npc.setItemSlot( "chest", chest)
-				npc.setItemSlot( "legs", legsbelly2 )
-				storage.belly = "3"
-			elseif stopWatch[#victim] > stageInterval then --40  Belly 1
-				npc.setItemSlot( "head", head)
-				npc.setItemSlot( "chest", chest)
-				npc.setItemSlot( "legs", legsbelly1 )
-				storage.belly = "2"
-			elseif stopWatch[#victim] <= stageInterval then -- 20 first stage
-				npc.setItemSlot( "head", headbelly2)
-				npc.setItemSlot( "chest", chest)
-				npc.setItemSlot( "legs", legs)
-				storage.belly = "1"
-				end
 			if stopWatch[#victim] > stageInterval*7.5 then
 				if containsPlayer() then
 					stopWatch[#victim] = stageInterval*7.4
 				else
 					release()
-					cloth()
+					cloth(head, legs, chest)
 				end
+			end
+			if stopWatch[#victim] > stageInterval*7 then
+				cloth(head, legsbelly6, chest)
+				storage.belly = "8"
+				currentLines = "trapped"
+			elseif stopWatch[#victim] > stageInterval*6 then 
+				cloth(head, legsbelly6, chest)
+				storage.belly = "7"
+				currentLines = "belly6"
+			elseif stopWatch[#victim] > stageInterval*5 then
+				cloth(head, legsbelly5, chest)
+				storage.belly = "6"
+				currentLines = "belly5"
+			elseif stopWatch[#victim] > stageInterval*4 then 
+				cloth(head, legsbelly4, chest)
+				storage.belly = "5"
+				currentLines = "belly4"
+			elseif stopWatch[#victim] > stageInterval*3 then 
+				cloth(head, legsbelly3, chest)
+				storage.belly = "4"
+				currentLines = "belly3"
+			elseif stopWatch[#victim] > stageInterval*2 then 
+				cloth(head, legsbelly2, chest)
+				storage.belly = "3"
+				currentLines = "belly2"
+			elseif stopWatch[#victim] > stageInterval then
+				cloth(head, legsbelly1, chest)
+				storage.belly = "2"
+				currentLines = "belly1"
+			elseif stopWatch[#victim] <= stageInterval then 
+				cloth(headbelly2, legs, chest)
+				storage.belly = "1"
+				currentLines = "mouth"
 			end
 		end
 	end
 	
-
 	if containsPlayer() and math.random(700) < 10 then
-		if stopWatch[#victim] > stageInterval*7 then
-			sayLine( playerLines["trapped"] )
-		elseif stopWatch[#victim] > stageInterval*6 then
-			sayLine( playerLines["belly6"] )
-		elseif stopWatch[#victim] > stageInterval*5 then
-			sayLine( playerLines["belly5"] )
-		elseif stopWatch[#victim] > stageInterval*4 then
-			sayLine( playerLines["belly4"] )
-		elseif stopWatch[#victim] > stageInterval*3 then
-			sayLine( playerLines["belly3"] )
-		elseif stopWatch[#victim] > stageInterval*2 then
-			sayLine( playerLines["belly2"] )
-		elseif stopWatch[#victim] > stageInterval then
-			sayLine( playerLines["belly1"] )
-		elseif stopWatch[#victim] <= stageInterval then
-			sayLine( playerLines["mouth"] )
-		end
+			sayLine( playerLines[currentLines] )
+		
 	end
 end
