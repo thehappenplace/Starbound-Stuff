@@ -15,7 +15,7 @@ Do not nest the folder so it should be Starbound/mods/Modfoldernamehere/ not Sta
 
 **INFO**
 
-They have the same spawn setup: 1 door, 1 Light, 6 floran, 1 Vore flag, Colony deed
+They have the same spawn setup: 1 door, 1 Light, 6 floran, 1 Vore badge, Colony deed
 
 They only have the one version and it does not digest.
 
