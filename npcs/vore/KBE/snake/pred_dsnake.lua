@@ -1,4 +1,4 @@
-require "/scripts/vore/npcvore.lua"
+require "/scripts/vore/npcvoreModified.lua"
 --########################################
 --  Based off of the Argo pred in the SSVM
 --########################################
