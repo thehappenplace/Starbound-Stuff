@@ -1,4 +1,4 @@
-require "/scripts/vore/npcvore.lua"
+require "/scripts/vore/npcvoreModified.lua"
 --########################################
 --  Based off of the Argo pred in the SSVM
 --########################################
@@ -314,7 +314,12 @@ end
 function escapeRoll(stage, args)
 			if (math.random(200) >= math.random(225 + (25 *stage))) then
 				stopWatch[#victim] = stopWatch[#victim] - stageInterval
-				sayLine(playerLines["bellySucc"])
+				if (stopWatch[#victim] < 0) then
+					reqRelease(args)
+					cloth(head, legs, chest)
+				else
+					sayLine(playerLines["bellySucc"])
+				end
 			else
 				sayLine(playerLines["bellyFail"])
 		
@@ -369,37 +374,37 @@ function updateHook(dt)
 			end
 			if stopWatch[#victim] > stageInterval*6 then --160 final stage
 				digestBellyChange()
-				storage.belly = "8"
+				storage.belly = "6"
 				currentLines = "trapped"
 				inStomach = true
 			elseif stopWatch[#victim] > stageInterval*5 then -- 140
 				cloth(head, legsbelly6, chest)
-				storage.belly = "7"
+				storage.belly = "6"
 				currentLines = "belly6"
 				inStomach = true
 			elseif stopWatch[#victim] > stageInterval*4 then -- 120 
 				cloth(head, legsbelly5, chest)
-				storage.belly = "6"
+				storage.belly = "5"
 				currentLines = "belly5"
 				inStomach = false
 			elseif stopWatch[#victim] > stageInterval*3 then --100
 				cloth(head, legsbelly4, chest)
-				storage.belly = "5"
+				storage.belly = "4"
 				currentLines = "belly4"
 				inStomach = false
 			elseif stopWatch[#victim] > stageInterval*2 then --80
 				cloth(head, legsbelly3, chest)
-				storage.belly = "4"
+				storage.belly = "3"
 				currentLines = "belly3"
 				inStomach = false
 			elseif stopWatch[#victim] > stageInterval then --60
 				cloth(head, legsbelly2, chest)
-				storage.belly = "3"
+				storage.belly = "2"
 				inStomach = false
 				currentLines = "belly2"
 			elseif stopWatch[#victim] <= stageInterval then --40  Belly 1
 				cloth(head, legsbelly1, chest)
-				storage.belly = "2"
+				storage.belly = "1"
 				inStomach = false
 				currentLines = "belly1"
 			end
