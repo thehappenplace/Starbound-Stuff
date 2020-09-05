@@ -1,4 +1,4 @@
-require "/scripts/vore/npcvore.lua"
+require "/scripts/vore/npcvoreModified.lua"
 --########################################
 --  Based off of the Argo pred in the SSVM
 --########################################
@@ -306,11 +306,17 @@ function plea(args)
 end
 
 function escapeRoll(stage, args)
-			if (math.random(200) >= math.random(225 + (25 *stage))) then  --Head Belly (chance for escape) stageInterval < 20
+			if (math.random(200) >= math.random(225 + (25 *stage))) then
 				stopWatch[#victim] = stopWatch[#victim] - stageInterval
-				sayLine(playerLines["bellySucc"])
+				if (stopWatch[#victim] < 0) then
+					reqRelease(args)
+					cloth(head, legs, chest)
+				else
+					sayLine(playerLines["bellySucc"])
+				end
 			else
 				sayLine(playerLines["bellyFail"])
+		
 			end
 end
 
